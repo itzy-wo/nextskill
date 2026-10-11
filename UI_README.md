@@ -2,7 +2,7 @@
 
 How the Career Skill-Gap Finder looks and behaves for the user.
 
-> **Plan:** the web UI starts in Phase 1, built with Streamlit (the tool named in my roadmap).
+> **Plan:** the web UI starts in Phase 1, built with Streamlit.
 > **Terminal:** used only for testing the logic while building.
 
 ## Why both
@@ -33,7 +33,7 @@ Short and simple. Each question asks about a skill area (for example: Python, SQ
 | 2 | TBD | TBD |
 | 3 | TBD | TBD |
 
-_Fill in the real questions once the questionnaire is final._
+Real questions would be filled later on.
 
 ## Screens
 
@@ -43,7 +43,7 @@ _Fill in the real questions once the questionnaire is final._
 | Loading | A short "Thinking..." message |
 | Results | 3 career suggestions with a short reason each |
 
-_Add screenshots here once the UI runs._
+Screenshots would be added here when the UI is completer.
 
 ## Terminal testing
 
@@ -58,7 +58,7 @@ Your top 3 career suggestions:
 3. <role>: <short reason>
 ```
 
-_Replace with a real copy-paste of your output once it runs._
+Real output would be displayed instead of "<role>:<short reason>".
 
 ## Input rules
 
