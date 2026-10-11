@@ -76,7 +76,7 @@ response = requests.post(url, headers=headers, json=body, timeout=30)
 
 The prompt asks the model for exactly 3 career suggestions with a short reason each.
 
-_Paste your final prompt text here once it is stable._
+--Final prompt would be paster over here--
 
 ## Response
 
