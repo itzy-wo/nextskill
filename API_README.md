@@ -1,39 +1,34 @@
 # API Guide
 
-How the Career Skill-Gap Finder talks to the LLM API.
+How NEXT-SKILL turns six chat answers into 3 career suggestions.
 
-An API works like this: **request in, JSON out.**
+An API works like this: **request in, JSON out.** This project has two of them. The chat page calls our own API, and our API calls Google Gemini.
 
-## Overview
-
-| Item | Value |
-|------|-------|
-| Provider | Google Gemini API (free tier, via Google AI Studio) |
-| Endpoint | `https://generativelanguage.googleapis.com/v1beta/models/<MODEL>:generateContent` |
-| Method | `POST` |
-| Library | `requests` |
-| Auth | API key from `.env`, sent in the `x-goog-api-key` header |
-| Model | Copy the exact current model name from Google's docs (example: `gemini-2.5-flash-lite`) |
-
-> Check Google's Gemini API docs for the current endpoint, model names and free-tier limits. They change often.
-
-## Flow: how the app connects to the API
+## Flow
 
 ```
-.env file  ->  load key  ->  questionnaire answers  ->  build prompt
-   ->  POST request to Gemini  ->  JSON response  ->  read the text
-   ->  show 3 career suggestions
+Chat page (chat.js)
+   |  POST /api/suggest  (6 answers as JSON)
+   v
+api.py (FastAPI)  ->  core.py: get_suggestions()
+   |  build prompt -> call Gemini (JSON mode) -> parse and check the reply
+   v
+Google Gemini API
+   |
+   v
+3 suggestions back to the chat page
 ```
 
-1. **Load the key** from `.env` with `python-dotenv`.
-2. **Collect answers** from the questionnaire into a Python dictionary (kept in memory).
-3. **Build a prompt** that includes the answers and asks for exactly 3 career suggestions.
-4. **Send the request** with `requests.post(...)`.
-5. **Check the status code.** Anything other than 200 is handled as an error (see below).
-6. **Parse the JSON** and pull out the text.
-7. **Show the 3 suggestions** to the user.
+No database is used. Answers live in the browser and in memory only for the length of a request.
 
-No database is needed in Phase 1. Answers live in memory while the program runs.
+## Files
+
+| File | Job |
+|------|-----|
+| `api.py` | The web API: `POST /api/suggest`, and it serves the `static/` folder |
+| `core.py` | The logic: build the prompt, call Gemini, check the reply |
+| `test_gemini.py` | First test script that sends one prompt to Gemini |
+| `test_terminal.py` | Runs the whole flow with sample answers in the terminal |
 
 ## Setup
 
@@ -41,77 +36,120 @@ No database is needed in Phase 1. Answers live in memory while the program runs.
 2. Create a `.env` file in the project root:
    ```
    GEMINI_API_KEY=your_key_here
+   GEMINI_MODEL=gemini-3.5-flash-lite
    ```
-3. Load it in Python:
-   ```python
-   from dotenv import load_dotenv
-   import os
-
-   load_dotenv()
-   api_key = os.getenv("GEMINI_API_KEY")
+3. Install the packages:
    ```
-4. Make sure `.env` is listed in `.gitignore`. **Never commit your key.**
+   pip install -r requirements.txt
+   ```
+4. Start the server:
+   ```
+   python -m uvicorn api:app --port 8000
+   ```
+5. Open `http://localhost:8000`.
 
-## Request
+`.env` is listed in `.gitignore`. **Never commit your key.**
 
-```python
-import requests
+> Model names change. If you get a 404 from Gemini, copy the current model name from Google's docs into `GEMINI_MODEL`.
 
-url = "https://generativelanguage.googleapis.com/v1beta/models/<MODEL>:generateContent"
-headers = {
-    "Content-Type": "application/json",
-    "x-goog-api-key": api_key,
+## Our endpoint: `POST /api/suggest`
+
+### Request
+
+```json
+{
+  "field": "BCA",
+  "interest": "Data and AI",
+  "enjoy": "Digging into data",
+  "skills": ["Python", "SQL"],
+  "level": "Can build small things",
+  "goal": "An internship"
 }
-body = {
-    "contents": [
-        {"parts": [{"text": prompt}]}
-    ]
-}
-response = requests.post(url, headers=headers, json=body, timeout=30)
 ```
 
-`prompt` is the text built from the questionnaire answers.
+| Field | Type | Rules |
+|-------|------|-------|
+| `field` | text | What they study, max 100 characters |
+| `interest` | text | Area they like most, max 100 characters |
+| `enjoy` | text | What they enjoy doing, max 100 characters |
+| `skills` | list of text | Skills they already have |
+| `level` | text | Comfort with their strongest skill, max 100 characters |
+| `goal` | text | What they want in the next year, max 100 characters |
 
-## Prompt
+### Response (200)
 
-The prompt asks the model for exactly 3 career suggestions with a short reason each.
-
---Final prompt would be paster over here--
-
-## Response
-
-The API returns JSON. The generated text is inside the `candidates` list.
-
-```python
-data = response.json()
-text = data["candidates"][0]["content"]["parts"][0]["text"]
+```json
+{
+  "suggestions": [
+    {
+      "role": "Data Analyst",
+      "why": "It aligns with your BCA background and passion for digging into data using Python and SQL.",
+      "learn_next": ["Pandas", "Tableau", "Statistics"]
+    }
+  ]
+}
 ```
 
-_Verify this shape against Google's docs and one real response before relying on it._
+The real response holds 3 items. Each has a role, a one-sentence reason (`why`), and 2-3 skills to learn next (`learn_next`).
 
-## Free tier limits
+### Status codes
 
-- The free tier is rate limited (requests per minute and per day vary by model).
-- Check the current limits table in Google's docs.
-- Free tier access depends on your country being eligible.
+| Code | Meaning | Cause |
+|------|---------|-------|
+| 200 | Success | 3 suggestions returned |
+| 422 | Bad input | A field is missing, too long, or the wrong type |
+| 502 | Gemini problem | Missing or rejected key, rate limit, no connection, or an unreadable reply |
+
+## How we call Gemini (inside `core.py`)
+
+| Item | Value |
+|------|-------|
+| Provider | Google Gemini API (free tier, via Google AI Studio) |
+| Endpoint | `https://generativelanguage.googleapis.com/v1beta/models/<MODEL>:generateContent` |
+| Method | `POST` using the `requests` library |
+| Auth | Key from `.env`, sent in the `x-goog-api-key` header |
+| Model | `GEMINI_MODEL` from `.env` (default `gemini-3.5-flash-lite`) |
+| Reply format | JSON mode, so Gemini answers with JSON only |
+
+Steps inside `get_suggestions(answers)`:
+1. **Build the prompt.** The six answers go into one prompt that asks for exactly 3 careers. Answers are capped at 100 characters, and the prompt tells Gemini they are data, not instructions.
+2. **Call Gemini** with JSON mode on.
+3. **Parse the reply.** Keep only `role`, `why` and `learn_next`, and return at most 3 items.
+4. **Fail safely.** If the reply isn't valid or is empty, raise an error with a friendly message instead of crashing.
+
+## Testing
+
+| Test | How | Expect |
+|------|-----|--------|
+| Key loads | `python -c "from dotenv import load_dotenv; import os; load_dotenv(); print('Key found' if os.getenv('GEMINI_API_KEY') else 'Key NOT found')"` | `Key found` |
+| Gemini works | `python test_gemini.py` | A short greeting |
+| Full flow | `python test_terminal.py` | 3 suggestions in the terminal |
+| API endpoint | Open `http://localhost:8000/docs`, try `POST /api/suggest` | Status 200 and 3 suggestions |
+| Bad input | Remove a field in `/docs` and run it | Status 422 |
 
 ## Error handling
 
-| Problem | Likely cause | What the app does |
-|---------|--------------|-------------------|
-| 400 | Bad request body or model name | Show a friendly error, check the request |
-| 401 / 403 | Wrong, missing or restricted API key | Show a key error message |
-| 429 | Rate limit hit | Tell the user to wait and retry |
-| 5xx | Provider problem | Tell the user to try later |
-| Timeout | Slow or no connection | Stop after the timeout, show message |
-| Missing `candidates` in JSON | Blocked or empty response | Show a friendly error, do not crash |
+| Problem | Likely cause | What the user sees |
+|---------|--------------|--------------------|
+| Key missing or rejected | `.env` missing, wrong name, or revoked key | A friendly message about the key |
+| 404 from Gemini | Outdated model name | Update `GEMINI_MODEL` |
+| 429 | Free-tier rate limit | Ask to wait a minute |
+| Timeout or no internet | Slow or no connection | Could not reach the service |
+| Unreadable JSON | Unexpected Gemini output | Try again |
+
+## Free tier notes
+
+- The free tier is rate limited, and limits change by model.
+- Free tier access depends on your country being eligible.
+- Read Google's terms for free-tier data use. Questionnaire answers are sent to Google's API.
 
 ## Security notes
 
-- Key lives only in `.env`, never in code or commits.
-- If a key is ever pushed to GitHub, delete it in Google AI Studio and create a new one.
-- Free-tier data terms: read Google's terms. Questionnaire answers are sent to Google's API.
+- The key lives only in `.env`. It never appears in code, logs or commits.
+- If a key is ever exposed, delete it in Google AI Studio and create a new one.
+- Typed answers are trimmed, and the prompt treats them as data, which limits prompt injection.
+- AI output is shown on the page as plain text, never as HTML.
 
 ## Baseline note
 
-The output of this API call is the **Phase 1 baseline**. In Phase 2, my own matching engine will be compared against it.
+The output of this API is the **Phase 1 baseline**. In Phase 2, my own matching engine will be compared against it.

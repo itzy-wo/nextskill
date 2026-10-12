@@ -1,8 +1,8 @@
 # Career Skill-Gap Finder
 
-Tell it what you know. It tells you what to learn next.
+Tell the chat your current skills it would suggest you 3 career paths
 
-> **Status:** Phase 1 of 3 (in progress). Small and working beats big and unfinished.
+> **Status:** Phase 1 of 3 (Completed). 
 
 ## What it does
 
@@ -12,16 +12,16 @@ You answer a short skills questionnaire. The app sends your answers to an LLM AP
 
 ## Phase 1 scope
 
-- [ ] Short skills questionnaire (Streamlit UI, terminal for testing)
-- [ ] First API call to an LLM
-- [ ] 3 career suggestions (baseline)
-- [ ] API key kept safe in a `.env` file
+- [x] Short skills questionnaire (Short skills questionnaire (chat page, scripted Q&A))
+- [x] First API call to an LLM
+- [x] 3 career suggestions (baseline)
+- [x] API key kept safe in a `.env` file
 
 **Done when:** it runs end to end and I can explain every single line.
 
 ## Tech stack
 
-Python, `requests`, `python-dotenv`, JSON, Streamlit, Google Gemini API (free tier), Git + GitHub
+Python, FastAPI, requests, python-dotenv, plain HTML/CSS/JavaScript, Google Gemini API (free tier), Git + GitHub.
 
 ## Setup
 
@@ -32,24 +32,25 @@ Python, `requests`, `python-dotenv`, JSON, Streamlit, Google Gemini API (free ti
    ```
 2. Install dependencies
    ```bash
-   pip install requests python-dotenv
+   pip install -r requirements.txt
    ```
 3. Create a `.env` file in the project root and add your key (never commit this file)
    ```
    GEMINI_API_KEY=your_key_here
+   GEMINI_MODEL=gemini-3.5-flash-lite
    ```
 4. Run it
    ```bash
-   python main.py
+   python -m uvicorn api:app --port 8000
    ```
-
+5. After that open http://localhost:8000 in the browser.
 ## Roadmap
 
 | Phase | Focus | Outcome |
 |-------|-------|---------|
 | 1. Foundations | Questionnaire + first LLM API call | Baseline of 3 career suggestions |
 | 2. Data + ML core | Job-posting dataset, skill extraction, matching engine | Measured results vs. the Phase 1 baseline |
-| 3. Product + users | Streamlit app, pytest tests, feedback form | Real people used it and I logged what they said |
+| 3. Product + users | Polished web app, pytest tests, feedback form | Real people used it and I logged what they said |
 
 ## Limits and privacy
 
