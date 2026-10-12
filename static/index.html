@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Character encoding for standard text rendering -->
+  <meta charset="UTF-8">
+  <!-- Ensure proper scaling on all mobile and desktop devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXT-SKILL</title>
+
+  <!-- Google Fonts: Bagel Fat One (playful heading) and Karla (clean body font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Link external stylesheet for graph-paper notebook styling -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Main container holding the left content and right illustration -->
+  <main class="welcome-container">
+    
+    <!-- Left-aligned hero content -->
+    <section class="welcome-left">
+      <!-- Main greeting heading -->
+      <h1 class="welcome-heading">Welcome to NEXT-SKILL</h1>
+
+      <!-- Subtext explaining the purpose -->
+      <p class="welcome-subtext">Find a path based on the skills you already have.</p>
+
+      <!-- Action wrapper holding button and note -->
+      <div class="action-wrapper">
+        <!-- Call to action button linking to chat.html (no arrows or emojis) -->
+        <a href="chat.html" class="cta-button" id="find-path-btn">Find your path</a>
+
+        <!-- Small informational line below button -->
+        <p class="small-note">Six quick questions. No sign-up.</p>
+      </div>
+    </section>
+
+    <!-- Right-aligned hand-drawn notebook SVG illustration -->
+    <section class="welcome-right" aria-label="Illustration of a confused student at a crossroads signpost">
+      <svg class="notebook-illustration" viewBox="0 0 540 450" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+        <desc>Hand-drawn doodle of a confused student scratching their head at a signpost with arrows pointing to Python, SQL, Design, and ???</desc>
+
+        <!-- Sketchy notebook margin star doodle in Marker Yellow #FFCB47 -->
+        <path d="M 60 70 L 64 82 L 76 85 L 67 93 L 70 105 L 59 98 L 49 105 L 52 93 L 43 85 L 55 82 Z" fill="#FFCB47" stroke="#14213D" stroke-width="2" stroke-linejoin="round" />
+
+        <!-- Sketchy ground line -->
+        <path d="M 30 405 C 150 401, 380 408, 510 404" stroke="#14213D" stroke-width="3.5" stroke-linecap="round" />
+
+        <!-- Small hand-drawn grass doodles on the ground -->
+        <path d="M 75 404 L 80 392 M 83 404 L 90 388 M 92 404 L 97 394" stroke="#14213D" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M 440 404 L 444 394 M 448 404 L 454 388 M 458 404 L 460 395" stroke="#14213D" stroke-width="2.5" stroke-linecap="round" />
+
+        <!-- ================= STUDENT DOODLE ================= -->
+        <g id="student">
+          <!-- Student shoes in Ink Navy #14213D -->
+          <ellipse cx="140" cy="403" rx="16" ry="8" fill="#14213D" />
+          <ellipse cx="185" cy="403" rx="16" ry="8" fill="#14213D" />
+
+          <!-- Student legs in Ink Navy #14213D -->
+          <path d="M 140 345 L 140 398" stroke="#14213D" stroke-width="6" stroke-linecap="round" />
+          <path d="M 185 345 L 185 398" stroke="#14213D" stroke-width="6" stroke-linecap="round" />
+
+          <!-- Student shirt in Sky #5BC0EB -->
+          <path d="M 125 245 C 130 238, 195 238, 200 245 L 206 348 L 119 348 Z" fill="#5BC0EB" stroke="#14213D" stroke-width="3.5" stroke-linejoin="round" />
+
+          <!-- Student left arm holding notebook binder under arm -->
+          <path d="M 198 252 Q 225 285 205 315" stroke="#14213D" stroke-width="4.5" stroke-linecap="round" fill="none" />
+
+          <!-- Notebook tucked under arm -->
+          <g transform="rotate(7 195 275)">
+            <rect x="195" y="275" width="26" height="36" rx="4" fill="#EEF2F7" stroke="#14213D" stroke-width="2.5" />
+            <!-- Sky blue notebook spine accent -->
+            <line x1="200" y1="281" x2="216" y2="281" stroke="#5BC0EB" stroke-width="2.5" stroke-linecap="round" />
+            <line x1="200" y1="289" x2="216" y2="289" stroke="#14213D" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="200" y1="297" x2="216" y2="297" stroke="#14213D" stroke-width="1.8" stroke-linecap="round" />
+          </g>
+
+          <!-- Student right arm reaching up to scratch head in confusion -->
+          <path d="M 125 252 Q 90 230 96 182 Q 102 150 135 158" stroke="#14213D" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+          <!-- Hand scratching hair -->
+          <circle cx="137" cy="158" r="6" fill="#EEF2F7" stroke="#14213D" stroke-width="2.5" />
+
+          <!-- Neck connecting head to torso -->
+          <rect x="154" y="230" width="16" height="18" fill="#EEF2F7" stroke="#14213D" stroke-width="3" />
+
+          <!-- Student head circle -->
+          <circle cx="162" cy="188" r="36" fill="#EEF2F7" stroke="#14213D" stroke-width="3.5" />
+
+          <!-- Messy hand-drawn student hair -->
+          <path d="M 128 180 C 122 145, 160 140, 196 148 C 202 180, 192 188, 192 188 C 182 155, 145 155, 134 182 Z" fill="#14213D" stroke="#14213D" stroke-width="2" />
+          <!-- Playful wild tufts of hair sticking out -->
+          <path d="M 148 148 Q 150 130 160 138 Q 170 126 174 146" stroke="#14213D" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+
+          <!-- Student face doodles: funny confused facial expression -->
+          <!-- Left eyebrow (quizzical high arch) -->
+          <path d="M 142 172 Q 150 164 157 172" stroke="#14213D" stroke-width="3" stroke-linecap="round" fill="none" />
+          <!-- Right eyebrow (slanted down in bewilderment) -->
+          <path d="M 168 176 L 182 182" stroke="#14213D" stroke-width="3" stroke-linecap="round" fill="none" />
+          <!-- Confused student eyes -->
+          <circle cx="150" cy="184" r="3.5" fill="#14213D" />
+          <circle cx="176" cy="187" r="3.5" fill="#14213D" />
+          <!-- Wavy / squiggly mouth -->
+          <path d="M 152 208 Q 159 202 165 210 Q 172 215 178 206" stroke="#14213D" stroke-width="3" stroke-linecap="round" fill="none" />
+
+          <!-- Sweat drop doodle in Sky #5BC0EB -->
+          <path d="M 205 170 C 205 170, 212 180, 212 184 C 212 188, 208 191, 204 191 C 200 191, 197 188, 197 184 C 197 180, 205 170, 205 170 Z" fill="#5BC0EB" stroke="#14213D" stroke-width="1.8" />
+
+          <!-- Confused spiral thought doodle floating near head in Sky #5BC0EB -->
+          <path d="M 120 130 Q 110 120 120 110 Q 132 110 130 124 Q 128 132 120 132" stroke="#5BC0EB" stroke-width="2.5" stroke-linecap="round" fill="none" />
+        </g>
+
+        <!-- ================= CROSSROADS SIGNPOST ================= -->
+        <!-- Vertical wooden post mounted into the ground -->
+        <g id="main-post">
+          <path d="M 338 85 L 360 85 L 364 405 L 334 405 Z" fill="#EEF2F7" stroke="#14213D" stroke-width="3.5" stroke-linejoin="round" />
+          <!-- Subtle wood grain doodles on post -->
+          <path d="M 347 115 L 347 150 M 352 210 L 352 255 M 346 320 L 346 375" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" />
+        </g>
+
+        <!-- Signpost arrows group: targeted by script.js to wobble once on page load -->
+        <g id="signpost-arrows">
+
+          <!-- Arrow 1: Pointing Left -> "Python" -->
+          <g id="arrow-python">
+            <!-- Wooden plank shaped like an arrow pointing left -->
+            <path d="M 350 100 L 235 100 L 210 124 L 235 148 L 350 148 Z" fill="#EEF2F7" stroke="#14213D" stroke-width="3.5" stroke-linejoin="round" />
+            <!-- Mounting nail in post -->
+            <circle cx="340" cy="124" r="3.5" fill="#14213D" />
+            <!-- Text label: Python in Karla font -->
+            <text x="282" y="131" font-family="'Karla', sans-serif" font-weight="700" font-size="18" fill="#14213D" text-anchor="middle">Python</text>
+          </g>
+
+          <!-- Arrow 2: Pointing Right -> "SQL" -->
+          <g id="arrow-sql">
+            <!-- Wooden plank shaped like an arrow pointing right in Marker Yellow #FFCB47 -->
+            <path d="M 345 160 L 440 160 L 465 184 L 440 208 L 345 208 Z" fill="#FFCB47" stroke="#14213D" stroke-width="3.5" stroke-linejoin="round" />
+            <!-- Mounting nail in post -->
+            <circle cx="356" cy="184" r="3.5" fill="#14213D" />
+            <!-- Text label: SQL in Karla font -->
+            <text x="396" y="191" font-family="'Karla', sans-serif" font-weight="700" font-size="18" fill="#14213D" text-anchor="middle">SQL</text>
+          </g>
+
+          <!-- Arrow 3: Pointing Left -> "Design" -->
+          <g id="arrow-design">
+            <!-- Wooden plank shaped like an arrow pointing left in Sky #5BC0EB -->
+            <path d="M 350 220 L 225 220 L 200 244 L 225 268 L 350 268 Z" fill="#5BC0EB" stroke="#14213D" stroke-width="3.5" stroke-linejoin="round" />
+            <!-- Mounting nail in post -->
+            <circle cx="340" cy="244" r="3.5" fill="#14213D" />
+            <!-- Text label: Design in Karla font -->
+            <text x="277" y="251" font-family="'Karla', sans-serif" font-weight="700" font-size="18" fill="#14213D" text-anchor="middle">Design</text>
+          </g>
+
+          <!-- Arrow 4: Pointing Right (tilted up whimsically) -> "???" -->
+          <!-- NOTE: Cherry color is used here and ONLY ONCE on the entire page -->
+          <g id="arrow-confused" transform="rotate(-6 350 295)">
+            <!-- Wooden plank shaped like a tilted arrow in Cherry -->
+            <path d="M 345 280 L 450 280 L 475 304 L 450 328 L 345 328 Z" fill="#E63946" stroke="#14213D" stroke-width="3.5" stroke-linejoin="round" />
+            <!-- Mounting nail in post -->
+            <circle cx="356" cy="304" r="3.5" fill="#14213D" />
+            <!-- Text label: ??? in Karla font -->
+            <text x="402" y="312" font-family="'Karla', sans-serif" font-weight="700" font-size="21" fill="#EEF2F7" text-anchor="middle">???</text>
+          </g>
+
+        </g>
+      </svg>
+    </section>
+
+  </main>
+
+  <!-- External script to trigger single wobble animation on load -->
+  <script src="script.js"></script>
+</body>
+</html>

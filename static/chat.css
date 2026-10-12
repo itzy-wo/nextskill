@@ -1,0 +1,816 @@
+/* ============================================================
+   NEXT-SKILL Chat Stylesheet
+   Palette: Paper #EEF2F7, Ink Navy #14213D, Marker Yellow #FFCB47, Sky #5BC0EB, Cherry #E63946
+   Typography: Bagel Fat One for headings, Karla for body & chips
+   Aesthetic: Graph-paper notebook with ink outlines & hard offset shadows
+   ============================================================ */
+/* CSS Reset and border-box sizing for all elements */
+* {
+  /* Ensure padding and border are included in element total size */
+  box-sizing: border-box;
+}
+/* Notebook graph-paper background without gradients */
+body {
+  /* Remove default body margin */
+  margin: 0;
+  /* Remove default body padding */
+  padding: 0;
+  /* Paper base background color */
+  background-color: #EEF2F7;
+  /* Faint graph-paper grid matching index.html */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M 24 0 L 0 0 0 24' fill='none' stroke='%23CBD5E1' stroke-width='0.75'/%3E%3C/svg%3E");
+  /* Graph grid cell size */
+  background-size: 24px 24px;
+  /* Default ink navy text color */
+  color: #14213D;
+  /* Primary body font family */
+  font-family: 'Karla', sans-serif;
+  /* Readable line height */
+  line-height: 1.5;
+  /* Fill minimum viewport height */
+  min-height: 100vh;
+  /* Flexbox layout column */
+  display: flex;
+  /* Stack navbar and main vertically */
+  flex-direction: column;
+}
+/* Top navigation bar layout */
+.chat-navbar {
+  /* Flex layout to space brand and tally */
+  display: flex;
+  /* Align items vertically in center */
+  align-items: center;
+  /* Space out brand and progress tracker */
+  justify-content: space-between;
+  /* Padding for navbar */
+  padding: 1rem 2rem;
+  /* Maximum width for readable layout */
+  max-width: 900px;
+  /* Full width container */
+  width: 100%;
+  /* Center navbar horizontally */
+  margin: 0 auto;
+  /* Notebook divider line */
+  border-bottom: 2px solid #14213D;
+  /* Match paper background color */
+  background-color: #EEF2F7;
+}
+/* Brand heading link */
+.brand-home-link {
+  /* Remove underline from link */
+  text-decoration: none;
+  /* Inline flex for logo align */
+  display: inline-flex;
+  /* Center items vertically */
+  align-items: center;
+  /* Gap between elements */
+  gap: 0.5rem;
+}
+/* Brand heading text */
+.brand-text {
+  /* Display font for brand logo */
+  font-family: 'Bagel Fat One', cursive;
+  /* Logo font size */
+  font-size: 1.8rem;
+  /* Ink navy color */
+  color: #14213D;
+  /* Standard letter spacing */
+  letter-spacing: normal;
+}
+/* Tally progress container */
+.tally-box {
+  /* Flex layout for label and tallies */
+  display: flex;
+  /* Align items center */
+  align-items: center;
+  /* Gap between elements */
+  gap: 0.6rem;
+  /* White paper background */
+  background-color: #FFFFFF;
+  /* Ink navy outline */
+  border: 2px solid #14213D;
+  /* Hard offset shadow */
+  box-shadow: 2.5px 2.5px 0 #14213D;
+  /* Inner padding */
+  padding: 0.35rem 0.85rem;
+  /* Slightly rounded corners */
+  border-radius: 6px;
+}
+/* Tally label text */
+.tally-label {
+  /* Small bold label size */
+  font-size: 0.95rem;
+  /* Bold weight */
+  font-weight: 700;
+  /* Ink navy text */
+  color: #14213D;
+}
+/* Tally SVG container */
+.tally-svg {
+  /* Block display to remove baseline spacing */
+  display: block;
+}
+/* Active tally strokes drawn in Ink Navy */
+.tally-active {
+  /* Override stroke color with ink navy */
+  stroke: #14213D !important;
+}
+/* Active 5th diagonal cross-stroke drawn in Cherry */
+.tally-active-cherry {
+  /* Override stroke color with cherry */
+  stroke: #E63946 !important;
+}
+/* Tally numerical counter text */
+.tally-counter {
+  /* Counter font size */
+  font-size: 0.95rem;
+  /* Bold weight */
+  font-weight: 700;
+  /* Ink navy text */
+  color: #14213D;
+}
+/* Main chat area layout */
+.chat-main {
+  /* Expand to fill available height */
+  flex: 1;
+  /* Flex container to center card */
+  display: flex;
+  /* Center card horizontally */
+  justify-content: center;
+  /* Page padding */
+  padding: 1.5rem 1rem 2.5rem 1rem;
+}
+/* Card wrapper holding messages and tray */
+.chat-card {
+  /* Maximum width of chat workspace */
+  max-width: 860px;
+  /* Full width container */
+  width: 100%;
+  /* Flex column layout */
+  display: flex;
+  /* Stack message stream and tray */
+  flex-direction: column;
+  /* Minimum comfortable height */
+  min-height: 75vh;
+}
+/* Message stream container */
+.chat-messages {
+  /* Grow to take remaining height */
+  flex: 1;
+  /* Flex column for messages */
+  display: flex;
+  /* Column direction */
+  flex-direction: column;
+  /* Gap between message rows */
+  gap: 1.25rem;
+  /* Vertical padding */
+  padding: 1rem 0 2rem 0;
+  /* Scroll vertically when messages overflow */
+  overflow-y: auto;
+}
+/* Row wrapping bot message and avatar */
+.bot-row {
+  /* Align items to top */
+  display: flex;
+  /* Start alignment */
+  align-items: flex-start;
+  /* Gap between avatar and note */
+  gap: 0.85rem;
+  /* Maximum message width */
+  max-width: 82%;
+  /* Align to left */
+  align-self: flex-start;
+}
+/* Confused student avatar frame */
+.bot-avatar {
+  /* Fixed width */
+  width: 44px;
+  /* Fixed height */
+  height: 44px;
+  /* Prevent shrinking */
+  min-width: 44px;
+  /* Avatar background */
+  background-color: #EEF2F7;
+  /* Ink border */
+  border: 2px solid #14213D;
+  /* Offset shadow */
+  box-shadow: 2px 2px 0 #14213D;
+  /* Circular frame */
+  border-radius: 50%;
+  /* Center avatar SVG */
+  display: flex;
+  /* Horizontal center */
+  align-items: center;
+  /* Vertical center */
+  justify-content: center;
+  /* Hide overflow */
+  overflow: hidden;
+}
+/* Bot sticky note message */
+.bot-note {
+  /* Clean paper note color */
+  background-color: #FFFFFF;
+  /* Ink navy text */
+  color: #14213D;
+  /* Solid ink outline */
+  border: 2px solid #14213D;
+  /* Hard offset ink shadow */
+  box-shadow: 3px 3px 0 #14213D;
+  /* Rounded corners */
+  border-radius: 6px;
+  /* Inner padding */
+  padding: 0.95rem 1.25rem;
+  /* Relative positioning */
+  position: relative;
+  /* Readable font size */
+  font-size: 1.15rem;
+  /* Line spacing */
+  line-height: 1.45;
+}
+/* Pip name label on note */
+.bot-name {
+  /* Display as block above message */
+  display: block;
+  /* Bold font weight */
+  font-weight: 700;
+  /* Small label size */
+  font-size: 0.85rem;
+  /* Sky blue accent color */
+  color: #5BC0EB;
+  /* Bottom margin */
+  margin-bottom: 0.25rem;
+  /* Standard lowercase capitalization */
+  text-transform: none;
+}
+/* User answer row on right */
+.user-row {
+  /* Align to right side */
+  align-self: flex-end;
+  /* Maximum message width */
+  max-width: 78%;
+  /* Flex layout */
+  display: flex;
+  /* Column layout */
+  flex-direction: column;
+  /* End alignment */
+  align-items: flex-end;
+}
+/* User yellow marker note */
+.user-note {
+  /* Marker yellow highlight color */
+  background-color: #FFCB47;
+  /* Ink navy text */
+  color: #14213D;
+  /* Solid ink outline */
+  border: 2px solid #14213D;
+  /* Hard offset shadow */
+  box-shadow: 3px 3px 0 #14213D;
+  /* Rounded corners */
+  border-radius: 6px;
+  /* Padding */
+  padding: 0.85rem 1.2rem;
+  /* Font size */
+  font-size: 1.1rem;
+  /* Bold marker text */
+  font-weight: 700;
+  /* Line height */
+  line-height: 1.4;
+  /* Break long words */
+  word-break: break-word;
+}
+/* Typing indicator note */
+.typing-note {
+  /* Flex layout */
+  display: flex;
+  /* Center items */
+  align-items: center;
+  /* Gap */
+  gap: 0.5rem;
+  /* Font size */
+  font-size: 1.05rem;
+  /* Text color */
+  color: #14213D;
+  /* Italicized note */
+  font-style: italic;
+  /* Compact padding */
+  padding: 0.65rem 1rem;
+}
+/* Animated ink dots */
+.typing-dots span {
+  /* Inline block for transform */
+  display: inline-block;
+  /* Bounce keyframe animation */
+  animation: ink-bounce 1s infinite;
+}
+/* Stagger second dot */
+.typing-dots span:nth-child(2) {
+  /* Animation delay for wave effect */
+  animation-delay: 0.2s;
+}
+/* Stagger third dot */
+.typing-dots span:nth-child(3) {
+  /* Animation delay for wave effect */
+  animation-delay: 0.4s;
+}
+/* Keyframes for ink bouncing */
+@keyframes ink-bounce {
+  /* Start and end at ground */
+  0%, 100% { transform: translateY(0); }
+  /* Highest bounce point */
+  50% { transform: translateY(-4px); }
+}
+/* Suggestion sticky note card */
+.suggestion-note {
+  /* Paper white note */
+  background-color: #FFFFFF;
+  /* Full width inside row */
+  width: 100%;
+}
+/* Suggestion role title */
+.suggestion-role {
+  /* Playful display font */
+  font-family: 'Bagel Fat One', cursive;
+  /* Title font size */
+  font-size: 1.35rem;
+  /* Ink navy color */
+  color: #14213D;
+  /* Margin spacing */
+  margin: 0 0 0.35rem 0;
+}
+/* Suggestion why sentence */
+.suggestion-why {
+  /* Clean body font */
+  font-family: 'Karla', sans-serif;
+  /* Text size */
+  font-size: 1.05rem;
+  /* Line height */
+  line-height: 1.4;
+  /* Ink color */
+  color: #14213D;
+  /* Margin spacing */
+  margin: 0 0 0.75rem 0;
+}
+/* Learn next section wrapper */
+.learn-section {
+  /* Flex column */
+  display: flex;
+  /* Column direction */
+  flex-direction: column;
+  /* Gap */
+  gap: 0.35rem;
+}
+/* Learn next label */
+.learn-label {
+  /* Bold weight */
+  font-weight: 700;
+  /* Label font size */
+  font-size: 0.9rem;
+  /* Ink color */
+  color: #14213D;
+}
+/* Learn next chips row */
+.learn-chips {
+  /* Flex wrap layout */
+  display: flex;
+  /* Allow chips to wrap */
+  flex-wrap: wrap;
+  /* Gap between chips */
+  gap: 0.45rem;
+}
+/* Individual small skill chip */
+.learn-chip {
+  /* Sky blue background */
+  background-color: #5BC0EB;
+  /* Ink navy text */
+  color: #14213D;
+  /* Body font */
+  font-family: 'Karla', sans-serif;
+  /* Small chip size */
+  font-size: 0.9rem;
+  /* Bold weight */
+  font-weight: 700;
+  /* Padding */
+  padding: 0.25rem 0.65rem;
+  /* Outline */
+  border: 1.5px solid #14213D;
+  /* Hard offset shadow */
+  box-shadow: 2px 2px 0 #14213D;
+  /* Rounded chip */
+  border-radius: 4px;
+}
+/* Bottom tray container */
+.chat-tray {
+  /* Dashed notebook margin line */
+  border-top: 2px dashed #14213D;
+  /* Top padding */
+  padding-top: 1.5rem;
+  /* Push to bottom of flex card */
+  margin-top: auto;
+}
+/* Chips container */
+.chips-container {
+  /* Flex wrap */
+  display: flex;
+  /* Wrap chips onto multiple lines */
+  flex-wrap: wrap;
+  /* Gap */
+  gap: 0.75rem;
+  /* Align items center */
+  align-items: center;
+}
+/* Interactive option chip */
+.answer-chip {
+  /* White background */
+  background-color: #FFFFFF;
+  /* Ink text */
+  color: #14213D;
+  /* Ink outline */
+  border: 2px solid #14213D;
+  /* Hard offset shadow */
+  box-shadow: 2.5px 2.5px 0 #14213D;
+  /* Rounded corners */
+  border-radius: 6px;
+  /* Inner padding */
+  padding: 0.65rem 1.1rem;
+  /* Font */
+  font-family: 'Karla', sans-serif;
+  /* Font size */
+  font-size: 1.05rem;
+  /* Medium weight */
+  font-weight: 500;
+  /* Pointer cursor */
+  cursor: pointer;
+  /* Smooth transition */
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+  /* Prevent text select */
+  user-select: none;
+}
+/* Chip hover state */
+.answer-chip:hover {
+  /* Slight lift */
+  transform: translate(-1px, -1px);
+  /* Grow shadow */
+  box-shadow: 3.5px 3.5px 0 #14213D;
+  /* Marker highlight */
+  background-color: #FFF6D6;
+}
+/* Chip active state */
+.answer-chip:active {
+  /* Press down */
+  transform: translate(1.5px, 1.5px);
+  /* Shrink shadow */
+  box-shadow: 1px 1px 0 #14213D;
+}
+/* Focus visible indicator */
+.answer-chip:focus-visible {
+  /* High contrast outline */
+  outline: 3px solid #14213D;
+  /* Offset from button */
+  outline-offset: 3px;
+}
+/* Multi-select active chip */
+.answer-chip.selected {
+  /* Marker yellow background */
+  background-color: #FFCB47;
+  /* Bold text */
+  font-weight: 700;
+  /* Shadow */
+  box-shadow: 2.5px 2.5px 0 #14213D;
+  /* Border */
+  border-color: #14213D;
+}
+/* Multi-select Done button */
+.done-button {
+  /* Marker yellow */
+  background-color: #FFCB47;
+  /* Ink navy text */
+  color: #14213D;
+  /* Solid border */
+  border: 2.5px solid #14213D;
+  /* Hard offset shadow */
+  box-shadow: 3px 3px 0 #14213D;
+  /* Rounded corners */
+  border-radius: 6px;
+  /* Padding */
+  padding: 0.7rem 1.5rem;
+  /* Font */
+  font-family: 'Karla', sans-serif;
+  /* Font size */
+  font-size: 1.1rem;
+  /* Bold weight */
+  font-weight: 700;
+  /* Pointer cursor */
+  cursor: pointer;
+  /* Transition */
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+/* Done button hover state */
+.done-button:hover {
+  /* Lift */
+  transform: translate(-1px, -1px);
+  /* Grow shadow */
+  box-shadow: 4px 4px 0 #14213D;
+}
+/* Done button focus */
+.done-button:focus-visible {
+  /* Focus outline */
+  outline: 3px solid #14213D;
+  /* Outline offset */
+  outline-offset: 3px;
+}
+/* Custom input form */
+.custom-input-form {
+  /* Flex layout */
+  display: flex;
+  /* Center items */
+  align-items: center;
+  /* Gap */
+  gap: 0.6rem;
+  /* Full width */
+  width: 100%;
+  /* Margin top */
+  margin-top: 0.75rem;
+}
+/* Custom text input field */
+.custom-input {
+  /* Grow to fill */
+  flex: 1;
+  /* White background */
+  background-color: #FFFFFF;
+  /* Ink border */
+  border: 2px solid #14213D;
+  /* Hard shadow */
+  box-shadow: 2.5px 2.5px 0 #14213D;
+  /* Rounded corners */
+  border-radius: 6px;
+  /* Padding */
+  padding: 0.7rem 1rem;
+  /* Font */
+  font-family: 'Karla', sans-serif;
+  /* Font size */
+  font-size: 1.05rem;
+  /* Ink text */
+  color: #14213D;
+}
+/* Custom input focus */
+.custom-input:focus-visible {
+  /* Outline */
+  outline: 3px solid #14213D;
+  /* Offset */
+  outline-offset: 2px;
+}
+/* Custom input submit button */
+.custom-submit-btn {
+  /* Sky blue */
+  background-color: #5BC0EB;
+  /* Ink text */
+  color: #14213D;
+  /* Ink border */
+  border: 2px solid #14213D;
+  /* Shadow */
+  box-shadow: 2.5px 2.5px 0 #14213D;
+  /* Rounded corners */
+  border-radius: 6px;
+  /* Padding */
+  padding: 0.7rem 1.3rem;
+  /* Font */
+  font-family: 'Karla', sans-serif;
+  /* Font size */
+  font-size: 1.05rem;
+  /* Bold weight */
+  font-weight: 700;
+  /* Pointer cursor */
+  cursor: pointer;
+}
+/* Custom submit focus */
+.custom-submit-btn:focus-visible {
+  /* Outline */
+  outline: 3px solid #14213D;
+  /* Offset */
+  outline-offset: 2px;
+}
+/* Summary card */
+.summary-card {
+  /* White card */
+  background-color: #FFFFFF;
+  /* Ink outline */
+  border: 2.5px solid #14213D;
+  /* Hard shadow */
+  box-shadow: 4px 4px 0 #14213D;
+  /* Rounded corners */
+  border-radius: 8px;
+  /* Inner padding */
+  padding: 1.75rem;
+  /* Margin top */
+  margin-top: 1rem;
+}
+/* Summary card title */
+.summary-heading {
+  /* Display font */
+  font-family: 'Bagel Fat One', cursive;
+  /* Title size */
+  font-size: 1.8rem;
+  /* Ink color */
+  color: #14213D;
+  /* Margin spacing */
+  margin: 0 0 0.5rem 0;
+}
+/* Summary card subtext */
+.summary-sub {
+  /* Font size */
+  font-size: 1.1rem;
+  /* Ink color */
+  color: #14213D;
+  /* Bottom margin */
+  margin: 0 0 1.25rem 0;
+}
+/* Summary list */
+.summary-list {
+  /* Remove bullets */
+  list-style: none;
+  /* Reset padding */
+  padding: 0;
+  /* Margin bottom */
+  margin: 0 0 1.5rem 0;
+  /* Flex column */
+  display: flex;
+  /* Direction */
+  flex-direction: column;
+  /* Gap between items */
+  gap: 0.85rem;
+}
+/* Summary individual item */
+.summary-item {
+  /* Flex column */
+  display: flex;
+  /* Column */
+  flex-direction: column;
+  /* Sky blue notebook margin line */
+  border-left: 3px solid #5BC0EB;
+  /* Padding left */
+  padding-left: 0.85rem;
+}
+/* Summary question label */
+.summary-q {
+  /* Font size */
+  font-size: 0.95rem;
+  /* Bold weight */
+  font-weight: 700;
+  /* Ink navy */
+  color: #14213D;
+}
+/* Summary answer text */
+.summary-a {
+  /* Font size */
+  font-size: 1.1rem;
+  /* Ink navy */
+  color: #14213D;
+}
+/* Start over button */
+.start-over-btn {
+  /* Marker yellow */
+  background-color: #FFCB47;
+  /* Ink navy */
+  color: #14213D;
+  /* Ink border */
+  border: 2.5px solid #14213D;
+  /* Hard shadow */
+  box-shadow: 3px 3px 0 #14213D;
+  /* Rounded corners */
+  border-radius: 6px;
+  /* Padding */
+  padding: 0.85rem 1.8rem;
+  /* Font */
+  font-family: 'Karla', sans-serif;
+  /* Font size */
+  font-size: 1.15rem;
+  /* Bold weight */
+  font-weight: 700;
+  /* Pointer cursor */
+  cursor: pointer;
+  /* Transition */
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+/* Start over hover */
+.start-over-btn:hover {
+  /* Lift */
+  transform: translate(-1px, -1px);
+  /* Grow shadow */
+  box-shadow: 4px 4px 0 #14213D;
+}
+/* Start over focus */
+.start-over-btn:focus-visible {
+  /* Outline */
+  outline: 3px solid #14213D;
+  /* Offset */
+  outline-offset: 3px;
+}
+/* Try again button on error */
+.try-again-btn {
+  /* Marker yellow */
+  background-color: #FFCB47;
+  /* Ink navy */
+  color: #14213D;
+  /* Ink border */
+  border: 2.5px solid #14213D;
+  /* Hard shadow */
+  box-shadow: 3px 3px 0 #14213D;
+  /* Rounded corners */
+  border-radius: 6px;
+  /* Padding */
+  padding: 0.75rem 1.6rem;
+  /* Font */
+  font-family: 'Karla', sans-serif;
+  /* Font size */
+  font-size: 1.1rem;
+  /* Bold weight */
+  font-weight: 700;
+  /* Pointer cursor */
+  cursor: pointer;
+  /* Transition */
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  /* Display as inline block */
+  display: inline-block;
+  /* Margin top */
+  margin-top: 0.75rem;
+}
+/* Try again hover */
+.try-again-btn:hover {
+  /* Lift */
+  transform: translate(-1px, -1px);
+  /* Grow shadow */
+  box-shadow: 4px 4px 0 #14213D;
+}
+/* Try again focus */
+.try-again-btn:focus-visible {
+  /* Outline */
+  outline: 3px solid #14213D;
+  /* Offset */
+  outline-offset: 3px;
+}
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable dots bounce animation */
+  .typing-dots span {
+    /* No animation */
+    animation: none !important;
+  }
+  /* Disable transition effects */
+  .answer-chip, .done-button, .start-over-btn, .try-again-btn {
+    /* Instant state change */
+    transition: none !important;
+  }
+}
+/* Mobile screen media queries */
+@media (max-width: 640px) {
+  /* Compact navbar padding */
+  .chat-navbar {
+    /* Mobile padding */
+    padding: 0.75rem 1rem;
+  }
+  /* Smaller brand text */
+  .brand-text {
+    /* Mobile font size */
+    font-size: 1.4rem;
+  }
+  /* Wider bot row on small screens */
+  .bot-row {
+    /* Mobile width */
+    max-width: 95%;
+  }
+  /* Wider user row on small screens */
+  .user-row {
+    /* Mobile width */
+    max-width: 95%;
+  }
+  /* Smaller avatar on mobile */
+  .bot-avatar {
+    /* Mobile avatar width */
+    width: 36px;
+    /* Mobile avatar height */
+    height: 36px;
+    /* Mobile min width */
+    min-width: 36px;
+  }
+  /* Mobile note sizing */
+  .bot-note, .user-note {
+    /* Font size */
+    font-size: 1.05rem;
+    /* Padding */
+    padding: 0.75rem 1rem;
+  }
+  /* Mobile chip sizing */
+  .answer-chip {
+    /* Font size */
+    font-size: 1rem;
+    /* Padding */
+    padding: 0.55rem 0.85rem;
+  }
+  /* Stack custom input vertically */
+  .custom-input-form {
+    /* Flex column */
+    flex-direction: column;
+    /* Stretch inputs */
+    align-items: stretch;
+  }
+}
