@@ -1,30 +1,21 @@
-# Import json to load the curriculum file
-import json
 # Import sys for exiting politely and configuring stream encoding
 import sys
-# Import Path for reliable file path resolution
-from pathlib import Path
-# Import check_answer from sql_checker to validate student queries
-from sql_checker import check_answer
+# Import tutor engine functions to manage curriculum, roadmap, lessons, and checks
+from tutor_engine import (
+    load_skill,
+    get_roadmap,
+    get_lesson,
+    check_lesson,
+    get_project,
+    get_project_task,
+    check_project_task,
+)
 
 # Ensure standard output can print Unicode characters safely on Windows
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
-
-
-# Function to load curriculum data from skills/sql.json
-def load_curriculum():
-    # Resolve the path to skills/sql.json relative to this script
-    script_dir = Path(__file__).resolve().parent
-    json_path = script_dir / "skills" / "sql.json"
-    # Fallback to local relative path if needed
-    if not json_path.exists():
-        json_path = Path("skills/sql.json")
-    # Open and parse the JSON file
-    with open(json_path, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 # Function to display tutor welcome and full curriculum roadmap
@@ -37,13 +28,15 @@ def print_welcome_and_roadmap(data):
     print("Welcome to your interactive SQL journey!\n")
     # Print roadmap header
     print("Roadmap:")
-    # Loop over all stages and print titles
-    for stage in data.get("stages", []):
+    # Fetch stages and lesson titles using get_roadmap from tutor_engine
+    roadmap = get_roadmap(data)
+    for stage in roadmap:
         stage_title = stage.get("title", "")
         print(f"Stage: {stage_title}")
         # Print lesson titles under each stage
         for lesson in stage.get("lessons", []):
-            print(f"  - {lesson.get('title', '')}")
+            lesson_title = lesson.get("title", "") if isinstance(lesson, dict) else str(lesson)
+            print(f"  - {lesson_title}")
     print()
 
 
@@ -77,106 +70,118 @@ def ask_student_query():
     return user_input
 
 
-# Function to assess query with 3 attempts (retry on 1st, hint on 2nd, answer on 3rd)
-def run_query_assessment(expected_query, ordered, cheer, retry_msg, hint):
-    # Track failed attempts
-    fail_count = 0
-    # Keep asking until passed or 3 fails reached
-    while True:
-        # Prompt student for query
-        student_query = ask_student_query()
-        # Evaluate query using sql_checker
-        passed, msg = check_answer(student_query, expected_query, ordered)
-        # If passed, print cheer and advance
-        if passed:
-            if cheer:
-                print(cheer)
-            print()
-            return True
-        # Increment failure count
-        fail_count += 1
-        # Check if the query failed due to a SQL error (e.g. invalid table or column)
-        is_sql_error = msg.startswith("SQL error:") or msg.startswith("Only a single SELECT") or msg.startswith("Query cannot be empty")
-        # Handle 1st failure
-        if fail_count == 1:
-            # If SQL error, show friendly message with the actual error text
-            if is_sql_error:
-                print(f"Oops, the database hit an error: {msg}")
-                print("Double-check your table or column names, then try again!\n")
-            # If query ran but produced wrong result, show lesson retry message
-            else:
-                print(retry_msg)
-                print()
-        # Handle 2nd failure: show hint
-        elif fail_count == 2:
-            if is_sql_error:
-                print(f"Oops, the database hit an error: {msg}")
-            print(f"Hint: {hint}")
-            print()
-        # Handle 3rd failure: print answer and move on
-        else:
-            print(f"Answer: {expected_query}")
-            print()
-            return False
+# Function to run an individual lesson using tutor_engine
+def run_lesson(skill_data_or_lesson, lesson_id=None):
+    # Support both (skill_data, lesson_id) and (lesson_dict,)
+    if lesson_id is None and isinstance(skill_data_or_lesson, dict) and "id" in skill_data_or_lesson:
+        target_lesson = skill_data_or_lesson
+        lesson_id = target_lesson.get("id")
+        skill_data = load_skill("sql")
+    else:
+        skill_data = skill_data_or_lesson
+        target_lesson = get_lesson(skill_data, lesson_id)
 
-
-# Function to run an individual lesson
-def run_lesson(lesson):
     # Print lesson header and intro
-    print(f"--- Lesson: {lesson.get('title', '')} ---\n")
-    print(lesson.get("intro", ""))
+    print(f"--- Lesson: {target_lesson.get('title', '')} ---\n")
+    print(target_lesson.get("intro", ""))
     print()
     # Print easy_words in full
-    print(lesson.get("easy_words", ""))
+    print(target_lesson.get("easy_words", ""))
     print()
     # Pause after easy_words
     wait_for_enter()
 
     # Print syntax (with 'Syntax:' once), syntax_note, example, and example_result
     print("Syntax:")
-    print(lesson.get("syntax", ""))
+    print(target_lesson.get("syntax", ""))
     print()
-    print(lesson.get("syntax_note", ""))
+    print(target_lesson.get("syntax_note", ""))
     print()
     print("Example:")
-    print(lesson.get("example", ""))
+    print(target_lesson.get("example", ""))
     print()
-    print(lesson.get("example_result", ""))
+    print(target_lesson.get("example_result", ""))
     print()
     # Pause before the task is shown
     wait_for_enter()
 
     # Print task
     print("Task:")
-    print(lesson.get("task", ""))
+    print(target_lesson.get("task", ""))
     print()
 
-    # Run the query assessment loop
-    expected_query = lesson.get("expected_query", "")
-    ordered = lesson.get("ordered", False)
-    cheer = lesson.get("cheer", "Great job!")
-    retry_msg = lesson.get("retry", "Ooh, so close! Try once more?")
-    hint = lesson.get("hint", "")
-    run_query_assessment(expected_query, ordered, cheer, retry_msg, hint)
+    # Assessment loop with 3 attempts via check_lesson
+    fail_count = 0
+    while True:
+        student_query = ask_student_query()
+        attempt = fail_count + 1
+        result = check_lesson(skill_data, lesson_id, student_query, attempt)
+
+        # On success, print cheer and move to next lesson
+        if result["passed"]:
+            if result.get("message"):
+                print(result["message"])
+            print()
+            return True
+
+        # Increment failure count
+        fail_count += 1
+        if result.get("message"):
+            print(result["message"])
+        if result.get("hint") and not result.get("answer"):
+            print(f"Hint: {result['hint']}")
+        if result.get("answer"):
+            print(f"Answer: {result['answer']}")
+            print()
+            return False
+        print()
 
 
-# Function to run project tasks for a stage
-def run_project(project):
+# Function to run project tasks for a stage using tutor_engine
+def run_project(skill_data_or_project, stage_id=1):
+    # Support both (skill_data, stage_id) and (project_dict,)
+    if isinstance(skill_data_or_project, dict) and "tasks" in skill_data_or_project:
+        project = skill_data_or_project
+        skill_data = load_skill("sql")
+    else:
+        skill_data = skill_data_or_project
+        project = get_project(skill_data, stage_id)
+
+    if not project:
+        return
+
     # Print project title and intro
     print(f"=== {project.get('title', 'Project')} ===\n")
     if project.get("intro"):
         print(f"{project.get('intro')}\n")
-    # Sugar's sweet retry message for project tasks
-    sugar_retry = "Ooh, not quite! Take a breath and give it another whirl. 🍬"
+
     # Run each task in the project
     tasks = project.get("tasks", [])
     for idx, task in enumerate(tasks, 1):
         print(f"Question {idx}: {task.get('question', '')}\n")
-        expected_query = task.get("expected_query", "")
-        ordered = task.get("ordered", False)
-        cheer = task.get("cheer", "Correct!")
-        hint = task.get("hint", "")
-        run_query_assessment(expected_query, ordered, cheer, sugar_retry, hint)
+        fail_count = 0
+        while True:
+            student_query = ask_student_query()
+            attempt = fail_count + 1
+            result = check_project_task(skill_data, stage_id, idx, student_query, attempt)
+
+            if result["passed"]:
+                if result.get("message"):
+                    print(result["message"])
+                print()
+                break
+
+            fail_count += 1
+            if result.get("message"):
+                print(result["message"])
+            if result.get("hint") and not result.get("answer"):
+                print(f"Hint: {result['hint']}")
+            if result.get("answer"):
+                print(f"Answer: {result['answer']}")
+                print()
+                break
+            print()
+
     # Print project cheer after all tasks are completed
     if project.get("cheer"):
         print(project.get("cheer"))
@@ -185,18 +190,19 @@ def run_project(project):
 
 # Main tutor loop
 def main():
-    # Load curriculum
-    data = load_curriculum()
+    # Load skill curriculum through tutor_engine
+    data = load_skill("sql")
     # 1. Print welcome and roadmap
     print_welcome_and_roadmap(data)
     # Process each stage
     for stage in data.get("stages", []):
+        stage_id = stage.get("id", 1)
         # 2-3. Process lessons
         for lesson in stage.get("lessons", []):
-            run_lesson(lesson)
+            run_lesson(data, lesson.get("id"))
         # 4. Process project tasks and cheer
         if "project" in stage:
-            run_project(stage["project"])
+            run_project(data, stage_id)
     # Final completion message
     print("You have completed all stages! Great work!")
 
