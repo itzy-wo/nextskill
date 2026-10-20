@@ -1,0 +1,114 @@
+{
+  "skill": "SQL",
+  "tutor": "Sugar",
+  "practice_table": "students",
+  "stages": [
+    {
+      "id": 1,
+      "title": "Read data from a table",
+      "lessons": [
+        {
+          "id": "1.1",
+          "title": "SELECT: ask for the columns you want",
+          "intro": "Hiii! Today we learn how to ask a table for exactly what you want.",
+          "easy_words": "A table is a spreadsheet that answers questions. If you ask for everything, it's like asking a waiter for 'the whole menu'. Sweet, but chaotic. SELECT lets you order only the dishes you want. (And if you ever DO want everything, a star * means 'all columns'.)",
+          "syntax": "SELECT column1, column2\nFROM table_name;",
+          "syntax_note": "SELECT = what you want, FROM = where it lives, ; = 'that's my order, thanks'.",
+          "example": "SELECT name, marks FROM students;",
+          "example_result": "Boom, you get just names and marks. No drama. 🍬",
+          "task": "Show me each student's name and city. I believe in you!",
+          "expected_query": "SELECT name, city FROM students;",
+          "ordered": false,
+          "hint": "Put the two column names after SELECT, with a comma between them, then say FROM students.",
+          "retry": "Ooh, so close! That one brought extra columns to the party. We only invited name and city. Try once more?",
+          "cheer": "Yesss! Exactly the two columns we invited. Table whisperer, that's you."
+        },
+        {
+          "id": "1.2",
+          "title": "WHERE: keep only the rows you want",
+          "intro": "Nice work! Now let's make the table pick favourites.",
+          "easy_words": "WHERE is a bouncer at the door. Every row has to pass your rule to get in. You can compare with = (equal), > (bigger), and < (smaller). Words like city names go inside single quotes, because the table is picky about text.",
+          "syntax": "SELECT columns\nFROM table_name\nWHERE condition;",
+          "syntax_note": "The condition is the bouncer's rule, like course = 'BCA' or marks > 70.",
+          "example": "SELECT * FROM students WHERE course = 'BCA';",
+          "example_result": "Only the BCA students get in. Everyone else waits outside. 🚪",
+          "task": "Show all columns for students from Pune.",
+          "expected_query": "SELECT * FROM students WHERE city = 'Pune';",
+          "ordered": false,
+          "hint": "Use SELECT * to get all columns, then WHERE city = 'Pune'. Don't forget the single quotes around Pune.",
+          "retry": "Almost! The bouncer is a bit confused. Check the rule after WHERE, and remember text goes in single quotes. Try again?",
+          "cheer": "Perfect! The bouncer let only the Pune crowd in. Strict but fair."
+        },
+        {
+          "id": "1.3",
+          "title": "ORDER BY and LIMIT: sort and cut the list",
+          "intro": "You're on a roll! Time to line everyone up.",
+          "easy_words": "ORDER BY lines the rows up, like a queue. DESC means biggest first, and ASC (the default) means smallest first. LIMIT says 'only the first few, please', like taking only the top slices of a pizza.",
+          "syntax": "SELECT columns\nFROM table_name\nORDER BY column DESC\nLIMIT number;",
+          "syntax_note": "Swap DESC for ASC to flip the queue. LIMIT always goes last.",
+          "example": "SELECT name, joined_year FROM students ORDER BY joined_year LIMIT 2;",
+          "example_result": "The two earliest joiners, first in line. Respect the veterans. 🍕",
+          "task": "Show all columns for the 3 students with the highest marks.",
+          "expected_query": "SELECT * FROM students ORDER BY marks DESC LIMIT 3;",
+          "ordered": true,
+          "hint": "Sort by marks with DESC so the biggest comes first, then LIMIT 3.",
+          "retry": "So close! The queue is in the wrong order, or too long. Highest marks first, and only 3 people. Try again?",
+          "cheer": "Top 3 on the podium. Gold, silver, bronze, and you get a gold star too."
+        },
+        {
+          "id": "1.4",
+          "title": "DISTINCT: no repeats, please",
+          "intro": "Last lesson of the stage. You're almost a SQL person!",
+          "easy_words": "Sometimes a column repeats the same value again and again, like 'Pune' showing up three times. DISTINCT says 'I've heard that one already, show it once'.",
+          "syntax": "SELECT DISTINCT column\nFROM table_name;",
+          "syntax_note": "DISTINCT goes right after SELECT.",
+          "example": "SELECT DISTINCT city FROM students;",
+          "example_result": "Each city appears exactly once. Clean and tidy. ✨",
+          "task": "List each course once.",
+          "expected_query": "SELECT DISTINCT course FROM students;",
+          "ordered": false,
+          "hint": "Put DISTINCT right after SELECT, then the column name course.",
+          "retry": "Hmm, some courses are showing up twice. Remember the magic word DISTINCT right after SELECT. Try again?",
+          "cheer": "Squeaky clean list! No repeats anywhere."
+        }
+      ],
+      "project": {
+        "title": "Stage 1 project: 5 questions about the students",
+        "intro": "Project time! Five questions, and you've got every tool you need. Take your time.",
+        "tasks": [
+          {
+            "question": "Show the name and marks of students with more than 80 marks.",
+            "expected_query": "SELECT name, marks FROM students WHERE marks > 80;",
+            "ordered": false,
+            "hint": "Use WHERE with the > sign on marks."
+          },
+          {
+            "question": "Show all columns for students who joined in 2022.",
+            "expected_query": "SELECT * FROM students WHERE joined_year = 2022;",
+            "ordered": false,
+            "hint": "Numbers don't need quotes. Use WHERE joined_year = 2022."
+          },
+          {
+            "question": "List each city once.",
+            "expected_query": "SELECT DISTINCT city FROM students;",
+            "ordered": false,
+            "hint": "DISTINCT goes right after SELECT."
+          },
+          {
+            "question": "Show the name and marks of the 2 lowest scorers.",
+            "expected_query": "SELECT name, marks FROM students ORDER BY marks ASC LIMIT 2;",
+            "ordered": true,
+            "hint": "Sort ascending so the smallest marks come first, then LIMIT 2."
+          },
+          {
+            "question": "Show all columns for BCA students, sorted by name from A to Z.",
+            "expected_query": "SELECT * FROM students WHERE course = 'BCA' ORDER BY name;",
+            "ordered": true,
+            "hint": "Combine WHERE for the course and ORDER BY name. WHERE comes before ORDER BY."
+          }
+        ],
+        "cheer": "Stage 1 complete! You can now read data from a table like a pro. Ready for Stage 2?"
+      }
+    }
+  ]
+}
